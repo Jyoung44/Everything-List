@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jim's Everything List — 2026</title>
+<style>
+  
+
+  :root {
+    --bg: #F7F5F0;
+    --surface: #FFFFFF;
+    --surface2: #F2EFE9;
+    --border: #E0DAD0;
+    --border2: #C8C0B4;
+    --text: #1C1A17;
+    --text2: #6B6560;
+    --text3: #9E9891;
+    --accent: #2B5EA7;
+    --accent-bg: #EAF0FA;
+    --accent-border: #B0C8EE;
+    --high: #C0392B;
+    --high-bg: #FDECEA;
+    --med: #C47A1A;
+    --med-bg: #FDF3E3;
+    --low: #2E7D32;
+    --low-bg: #E8F5E9;
+    --done: #5A8A5A;
+    --done-bg: #EEF6EE;
+    --red: #C0392B;
+    --red-bg: #FDECEA;
+    --shadow: 0 1px 4px rgba(0,0,0,0.08);
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 24px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+  }
+
+  .header-top { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+
+  .header-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .header-sub {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 2px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-weight: 300;
+  }
+
+  .btn {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--surface2); }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: #1e4d8c; border-color: #1e4d8c; }
+  .btn-danger { background: var(--red-bg); color: var(--red); border-color: #f0b0aa; }
+  .btn-danger:hover { background: #f9d5d2; }
+  .btn-sm { font-size: 12px; padding: 5px 12px; }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    text-align: center;
+  }
+  .stat-val { font-size: 24px; font-weight: 600; color: var(--text); font-family: Georgia, 'Times New Roman', serif; }
+  .stat-label { font-size: 11px; color: var(--text3); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .controls-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .search-wrap { position: relative; flex: 1; min-width: 180px; }
+  .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: 0.4; }
+  .search-input {
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    padding: 8px 12px 8px 34px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+  }
+  .search-input:focus { border-color: var(--accent); }
+
+  .filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pill {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .pill:hover { background: var(--surface2); }
+  .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  .add-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    display: none;
+  }
+  .add-panel.open { display: block; }
+  .add-panel label { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px; }
+  .add-panel textarea {
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border2);
+    background: var(--bg);
+    color: var(--text);
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+  }
+  .add-panel textarea:focus { border-color: var(--accent); background: var(--surface); }
+  .add-panel select {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    padding: 7px 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+  }
+
+  .cat-section { margin-bottom: 24px; }
+
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 6px;
+    transition: background 0.15s;
+  }
+  .cat-header:hover { background: var(--surface2); }
+  .cat-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+  .cat-name { font-family: Georgia, 'Times New Roman', serif; font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+  .cat-progress { font-size: 12px; color: var(--text3); }
+  .cat-chevron { font-size: 11px; color: var(--text3); }
+
+  .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+
+  .task-list { display: flex; flex-direction: column; gap: 5px; }
+
+  .task-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .task-card:hover { border-color: var(--border2); box-shadow: var(--shadow); }
+  .task-card.expanded { border-color: var(--accent-border); box-shadow: 0 2px 8px rgba(43,94,167,0.1); }
+  .task-card.is-done { opacity: 0.6; }
+
+  .task-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 14px;
+    cursor: pointer;
+  }
+
+  .check-btn {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border2);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    background: var(--surface);
+    transition: all 0.15s;
+    color: transparent;
+  }
+  .check-btn:hover { border-color: var(--done); }
+  .task-card.is-done .check-btn { background: var(--done-bg); border-color: var(--done); color: var(--done); }
+
+  .task-body { flex: 1; min-width: 0; }
+  .task-text { font-size: 14px; color: var(--text); line-height: 1.45; }
+  .task-card.is-done .task-text { text-decoration: line-through; color: var(--text3); }
+  .task-snippet { font-size: 12px; color: var(--text3); margin-top: 3px; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .task-due { font-size: 11px; font-weight: 600; color: var(--med); margin-top: 2px; }
+  .task-due.overdue { color: var(--high); }
+
+  .task-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .done-stamp { font-size: 11px; color: var(--text3); }
+  .p-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .p-high { background: var(--high-bg); color: var(--high); }
+  .p-med { background: var(--med-bg); color: var(--med); }
+  .p-low { background: var(--low-bg); color: var(--low); }
+  .expand-chevron { font-size: 11px; color: var(--text3); }
+
+  .task-detail {
+    border-top: 1px solid var(--border);
+    padding: 14px 16px;
+    background: var(--accent-bg);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .detail-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 5px;
+  }
+
+  .detail-textarea {
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    padding: 9px 11px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text);
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    line-height: 1.5;
+  }
+  .detail-textarea:focus { border-color: var(--accent); }
+
+  .detail-input {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    padding: 7px 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    width: 100%;
+  }
+  .detail-input:focus { border-color: var(--accent); }
+
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 480px) { .detail-grid { grid-template-columns: 1fr; } }
+
+  .detail-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding-top: 4px; }
+
+  .empty-state { font-size: 13px; color: var(--text3); padding: 12px 14px; font-style: italic; }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--text);
+    color: #fff;
+    font-size: 13px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 600px) {
+    .header { padding: 14px 16px 12px; }
+    .header-title { font-size: 18px; }
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+    .task-right { flex-direction: column; align-items: flex-end; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="max-width:800px;margin:0 auto;">
+    <div class="header-top">
+      <div>
+        <div class="header-title">Jim's Everything List</div>
+        <div class="header-sub">2026 + 5 Year Plan &nbsp;·&nbsp; Updated <span id="lastSaved">never</span></div>
+      </div>
+      <button class="btn btn-primary" onclick="toggleAdd()">+ Add Items</button>
+    </div>
+    <div class="stats-row" id="statsRow"></div>
+    <div class="controls-row">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" id="searchBox" placeholder="Search tasks and notes..." oninput="render()" />
+      </div>
+    </div>
+    <div class="filter-pills">
+      <span class="pill active" onclick="setFilter('all',this)">All</span>
+      <span class="pill" onclick="setFilter('active',this)">Active</span>
+      <span class="pill" onclick="setFilter('done',this)">Completed</span>
+      <span class="pill" onclick="setFilter('high',this)">High priority</span>
+      <span class="pill" onclick="setFilter('noted',this)">Has notes</span>
+      <span class="pill" onclick="setFilter('due',this)">Has due date</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="add-panel" id="addPanel">
+    <label>New tasks — one per line</label>
+    <textarea id="noteInput" placeholder="e.g.&#10;Call Rob Carneal about trust update&#10;Schedule LifeForce appointment&#10;Review 529 plan with Larry Hause"></textarea>
+    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;align-items:center;">
+      <select id="newCat" style="font-family:'Source Sans 3',sans-serif;font-size:13px;padding:7px 10px;border-radius:8px;border:1px solid #C8C0B4;background:#fff;color:#1C1A17;">
+        <option>Calendar &amp; Scheduling</option>
+        <option>Family</option>
+        <option>Health &amp; Fitness</option>
+        <option>Properties</option>
+        <option>Business Projects</option>
+        <option>Investments &amp; Financial</option>
+        <option>Personal Projects</option>
+      </select>
+      <select id="newPri" style="font-family:'Source Sans 3',sans-serif;font-size:13px;padding:7px 10px;border-radius:8px;border:1px solid #C8C0B4;background:#fff;color:#1C1A17;">
+        <option value="high">High priority</option>
+        <option value="med" selected>Medium priority</option>
+        <option value="low">Low priority</option>
+      </select>
+      <button class="btn btn-primary btn-sm" onclick="addItems()">Add to list</button>
+      <button class="btn btn-sm" onclick="toggleAdd()">Cancel</button>
+    </div>
+  </div>
+
+  <div id="container"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CATS = [
+  {name:'Calendar & Scheduling', color:'#2B6CB0'},
+  {name:'Family', color:'#B83280'},
+  {name:'Health & Fitness', color:'#276749'},
+  {name:'Properties', color:'#C05621'},
+  {name:'Business Projects', color:'#553C9A'},
+  {name:'Investments & Financial', color:'#285E61'},
+  {name:'Personal Projects', color:'#9C4221'},
+];
+
+const SEED = [
+  {id:1,cat:'Calendar & Scheduling',text:'YB 50th Anniversary — schedule main celebration event',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:2,cat:'Calendar & Scheduling',text:'Art Shows and Auctions — add to calendar',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:3,cat:'Calendar & Scheduling',text:'Family Governance Meetings — schedule 2026 dates',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:4,cat:'Calendar & Scheduling',text:'Personal Financial Meeting — schedule with Rob Carneal',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:5,cat:'Calendar & Scheduling',text:'Erik Hanson meetings — schedule recurring',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:6,cat:'Calendar & Scheduling',text:'Larry Hause meeting — schedule',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:7,cat:'Calendar & Scheduling',text:'Sedona trips — add to calendar',priority:'low',done:false,doneDate:null,note:'',due:''},
+  {id:8,cat:'Calendar & Scheduling',text:'Nutrioso trips — add to calendar',priority:'low',done:false,doneDate:null,note:'',due:''},
+  {id:9,cat:'Calendar & Scheduling',text:'Family Vacation — plan and schedule',priority:'med',done:true,doneDate:'Jun 20, 2026',note:'',due:''},
+  {id:10,cat:'Calendar & Scheduling',text:'ManCation — plan and schedule',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:11,cat:'Calendar & Scheduling',text:'Golf — schedule regular rounds',priority:'low',done:false,doneDate:null,note:'',due:''},
+  {id:12,cat:'Calendar & Scheduling',text:'Sedona Farmers Market visits',priority:'low',done:false,doneDate:null,note:'',due:''},
+  {id:13,cat:'Calendar & Scheduling',text:'Mohamed — schedule meeting',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:14,cat:'Calendar & Scheduling',text:'JP Morgan — schedule meeting',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:15,cat:'Calendar & Scheduling',text:'Crewe — schedule meeting',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:16,cat:'Calendar & Scheduling',text:'Rick Cluck — schedule meeting',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:17,cat:'Calendar & Scheduling',text:'CCV Coolidge and Florence — schedule meetings',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:18,cat:'Calendar & Scheduling',text:'Williams RV — Sean Casey meeting',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:20,cat:'Business Projects',text:'50th Anniversary — write speech (work with AB)',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:21,cat:'Business Projects',text:'50th Anniversary — plan big celebration event',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:22,cat:'Business Projects',text:'50th Anniversary — produce "50 Years of YB" video',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:23,cat:'Business Projects',text:'50th Anniversary — hire videographer',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:24,cat:'Business Projects',text:'50th Anniversary — select Lifetime Achievement Recipients',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:25,cat:'Business Projects',text:'50th Anniversary — meet with Johnathan re: Lifetime Recipients',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:26,cat:'Business Projects',text:'50th Anniversary — Customer Appreciation Golf Event remarks',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:27,cat:'Business Projects',text:'50th Anniversary Book — write the stories',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:28,cat:'Business Projects',text:'50th Anniversary Book — Claude review and clean up',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:29,cat:'Business Projects',text:'50th Anniversary Book — complete suggested writing (Danny & Jessica)',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:30,cat:'Business Projects',text:'Williams RV and Workforce Housing — advance with Erik Hanson',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:31,cat:'Business Projects',text:'Z-Modular — evaluate with Erik Hanson (added March 6)',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:32,cat:'Business Projects',text:'CCV Coolidge — advance project',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:33,cat:'Business Projects',text:'CCV Florence — advance project',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:34,cat:'Business Projects',text:'Closeout Rosewood — complete closeout',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:35,cat:'Business Projects',text:'Closeout XO — complete closeout',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:36,cat:'Business Projects',text:'Dave Sherwood — business planning meetings 2026',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:37,cat:'Business Projects',text:'Park 7 — advance with Erik Hanson',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:38,cat:'Business Projects',text:'Sedona State Land — evaluate with Erik Hanson',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:39,cat:'Business Projects',text:'Opportunity Zones — evaluate with Erik Hanson',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:40,cat:'Business Projects',text:'AI — learn and integrate Claude into workflow',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:50,cat:'Family',text:'Family Governance — review Robin Miskell',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:51,cat:'Family',text:'Family Governance — identify Successor Trustee',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:52,cat:'Family',text:'Family Governance — identify Board of Directors',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:53,cat:'Family',text:'Family Governance — document everything: book + electronic file',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:54,cat:'Family',text:'Family Governance — review Trusts in plain English',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:55,cat:'Family',text:'529 Plan — review and fund',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:56,cat:'Family',text:'Family Office — establish or review',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:57,cat:'Family',text:'Family Vacation — plan destination and dates',priority:'med',done:true,doneDate:'Jun 20, 2026',note:'',due:''},
+  {id:58,cat:'Family',text:'Jimmy — landscape follow-up',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:59,cat:'Family',text:'Jimmy — spec home: follow up on progress',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:60,cat:'Family',text:'Jimmy — Sean material follow-up',priority:'low',done:false,doneDate:null,note:'',due:''},
+  {id:61,cat:'Family',text:'Brent — follow up on how business is doing',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:62,cat:'Family',text:'Brent — Newport Beach rental July 4 2026: confirm arrangements',priority:'med',done:false,doneDate:null,note:'Linda found rental for Brent, Priscilla, Braxton and Brogan.',due:'2026-07-04'},
+  {id:63,cat:'Family',text:'Braxton — buy Razor',priority:'low',done:true,doneDate:'Mar 4, 2026',note:'Completed March 4, 2026.',due:''},
+  {id:64,cat:'Family',text:'James Perry — visit: meeting with James, Erik, Jimmy',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:65,cat:'Family',text:'Rob Carneal — 2026 planning meeting',priority:'high',done:false,doneDate:null,note:'Email: lmcarneal@aol.com  |  Text: 602-743-2417',due:''},
+  {id:70,cat:'Health & Fitness',text:'Schedule LifeForce appointment',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:71,cat:'Health & Fitness',text:'Test VO2 Max',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:72,cat:'Health & Fitness',text:'Daily — Gratitude, Bible, Prayer',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:73,cat:'Health & Fitness',text:'Daily — Sauna',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:74,cat:'Health & Fitness',text:'Daily — Supplements',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:75,cat:'Health & Fitness',text:'Personal confidence — identify specific actions',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:76,cat:'Health & Fitness',text:'Explore: Family Sober Living opportunity',priority:'low',done:false,doneDate:null,note:'',due:''},
+  {id:80,cat:'Properties',text:'Sedona — prune fruit trees (Jan–Feb apples/pears; spring stone fruits)',priority:'high',done:false,doneDate:null,note:'The four Ds: cut Downward, Diseased, Damaged, Dead branches first at the source.',due:''},
+  {id:81,cat:'Properties',text:'Sedona — build deck',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:82,cat:'Properties',text:'Sedona — evaluate State Land: decide on further investment',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:83,cat:'Properties',text:'Sedona — mow property',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:84,cat:'Properties',text:'Sedona — repair garage door on barn',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:85,cat:'Properties',text:'Sedona — start up and drive General',priority:'low',done:false,doneDate:null,note:'',due:''},
+  {id:86,cat:'Properties',text:'Sedona — Design Studio: set up workspace',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:87,cat:'Properties',text:'Sedona — contact builder and architect for Barndominium',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:88,cat:'Properties',text:'Sedona — organize tools in toolboxes',priority:'low',done:false,doneDate:null,note:'',due:''},
+  {id:89,cat:'Properties',text:'Sedona Barndominium — use AI for floor plans and design',priority:'med',done:false,doneDate:null,note:'',due:''},
+  {id:90,cat:'Properties',text:'Scottsdale — additional RV garage and storage: advance project',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:91,cat:'Properties',text:'Nutrioso — mowing schedule',priority:'low',done:false,doneDate:null,note:'',due:''},
+  {id:100,cat:'Investments & Financial',text:'Investment 2026 — annual review and strategy',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:101,cat:'Investments & Financial',text:'Larry Hause — investment meetings 2026',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:102,cat:'Investments & Financial',text:'JAY Investments — review with Rob Carneal',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:103,cat:'Investments & Financial',text:'529 Plan — review funding levels for all grandchildren',priority:'high',done:false,doneDate:null,note:'',due:''},
+  {id:104,cat:'Investments & Financial',text:"Younger Decedent's Trust — annual review with Rob Carneal",priority:'high',done:false,doneDate:null,note:'Rob Carneal is sole Trustee. Email: lmcarneal@aol.com',due:''},
+];
+
+let tasks, expanded = {}, collapsed = {}, filter = 'all';
+
+function load() {
+  try {
+    const s = localStorage.getItem('jim_list_2026_v5');
+    tasks = s ? JSON.parse(s) : SEED.map(t => ({...t}));
+  } catch(e) { tasks = SEED.map(t => ({...t})); }
+}
+
+function save() {
+  try {
+    localStorage.setItem('jim_list_2026_v5', JSON.stringify(tasks));
+    const now = new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit'});
+    document.getElementById('lastSaved').textContent = now;
+  } catch(e) {}
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function toggleAdd() {
+  document.getElementById('addPanel').classList.toggle('open');
+}
+
+function addItems() {
+  const raw = document.getElementById('noteInput').value.trim();
+  if (!raw) return;
+  const cat = document.getElementById('newCat').value;
+  const priority = document.getElementById('newPri').value;
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+  let maxId = Math.max(...tasks.map(t => t.id), 200);
+  lines.forEach(line => tasks.push({id:++maxId, cat, text:line, priority, done:false, doneDate:null, note:'', due:''}));
+  save(); render();
+  document.getElementById('noteInput').value = '';
+  document.getElementById('addPanel').classList.remove('open');
+  showToast(`${lines.length} item${lines.length>1?'s':''} added`);
+}
+
+function toggleDone(id, e) {
+  if (e) e.stopPropagation();
+  const t = tasks.find(t => t.id === id);
+  if (!t) return;
+  t.done = !t.done;
+  t.doneDate = t.done ? new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : null;
+  save(); render();
+  showToast(t.done ? 'Marked complete ✓' : 'Marked active');
+}
+
+function toggleExpand(id) {
+  expanded[id] = !expanded[id];
+  render();
+}
+
+function saveNote(id) {
+  const t = tasks.find(t => t.id === id);
+  if (!t) return;
+  const n = document.getElementById('note_'+id);
+  const d = document.getElementById('due_'+id);
+  const p = document.getElementById('pri_'+id);
+  if (n) t.note = n.value;
+  if (d) t.due = d.value;
+  if (p) t.priority = p.value;
+  save();
+  expanded[id] = false;
+  render();
+  showToast('Saved');
+}
+
+function deleteTask(id) {
+  if (!confirm('Delete this item? This cannot be undone.')) return;
+  tasks = tasks.filter(t => t.id !== id);
+  save(); render();
+  showToast('Item deleted');
+}
+
+function setFilter(f, el) {
+  filter = f;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function toggleCollapse(cat) {
+  collapsed[cat] = !collapsed[cat];
+  render();
+}
+
+function isOverdue(due) {
+  if (!due) return false;
+  return new Date(due) < new Date(new Date().toDateString());
+}
+
+function formatDue(due) {
+  if (!due) return '';
+  const d = new Date(due + 'T00:00:00');
+  return d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+}
+
+function render() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  const total = tasks.length;
+  const done = tasks.filter(t => t.done).length;
+  const high = tasks.filter(t => t.priority === 'high' && !t.done).length;
+  const noted = tasks.filter(t => t.note && t.note.trim()).length;
+
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat"><div class="stat-val">${total}</div><div class="stat-label">Total</div></div>
+    <div class="stat"><div class="stat-val">${total - done}</div><div class="stat-label">Active</div></div>
+    <div class="stat"><div class="stat-val">${done}</div><div class="stat-label">Done</div></div>
+    <div class="stat"><div class="stat-val">${high}</div><div class="stat-label">High priority</div></div>
+    <div class="stat"><div class="stat-val">${noted}</div><div class="stat-label">Notes</div></div>
+  `;
+
+  let html = '';
+
+  CATS.forEach(cat => {
+    let items = tasks.filter(t => t.cat === cat.name);
+    if (q) items = items.filter(t => t.text.toLowerCase().includes(q) || (t.note && t.note.toLowerCase().includes(q)));
+    if (filter === 'active') items = items.filter(t => !t.done);
+    if (filter === 'done') items = items.filter(t => t.done);
+    if (filter === 'high') items = items.filter(t => t.priority === 'high' && !t.done);
+    if (filter === 'noted') items = items.filter(t => t.note && t.note.trim());
+    if (filter === 'due') items = items.filter(t => t.due && !t.done);
+
+    const isCol = collapsed[cat.name];
+    const catDone = items.filter(t => t.done).length;
+    const pct = items.length ? Math.round((catDone / items.length) * 100) : 0;
+
+    if (!items.length) {
+      html += `<div class="cat-section">
+        <div class="cat-header" onclick="toggleCollapse('${cat.name.replace(/&/g,'&amp;')}')">
+          <div class="cat-dot" style="background:${cat.color}"></div>
+          <span class="cat-name">${cat.name}</span>
+          <span class="cat-progress">0 of 0 done</span>
+          <span class="cat-chevron">${isCol ? '▶' : '▼'}</span>
+        </div>
+        ${!isCol ? '<div class="empty-state">No items yet — use + Add Items above to add your first one.</div>' : ''}
+      </div>`;
+      return;
+    }
+
+    html += `<div class="cat-section">
+      <div class="cat-header" onclick="toggleCollapse('${cat.name.replace(/&/g,'&amp;')}')">
+        <div class="cat-dot" style="background:${cat.color}"></div>
+        <span class="cat-name">${cat.name}</span>
+        <span class="cat-progress">${catDone} of ${items.length} done</span>
+        <span class="cat-chevron">${isCol ? '▶' : '▼'}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${cat.color};"></div></div>`;
+
+    if (!isCol) {
+      html += `<div class="task-list">`;
+      items.forEach(t => {
+        const isExp = expanded[t.id];
+        const pbadge = `p-${t.priority}`;
+        const ptext = t.priority === 'high' ? 'High' : t.priority === 'med' ? 'Med' : 'Low';
+        const snippet = t.note ? t.note.substring(0, 70) + (t.note.length > 70 ? '…' : '') : '';
+        const dueLabel = t.due && !t.done ? `Due: ${formatDue(t.due)}` : '';
+        const overdue = t.due && !t.done && isOverdue(t.due);
+
+        html += `<div class="task-card ${t.done ? 'is-done' : ''} ${isExp ? 'expanded' : ''}">
+          <div class="task-row" onclick="toggleExpand(${t.id})">
+            <div class="check-btn" onclick="toggleDone(${t.id}, event)" title="Mark complete">${t.done ? '✓' : ''}</div>
+            <div class="task-body">
+              <div class="task-text">${t.text}</div>
+              ${snippet ? `<div class="task-snippet">${snippet}</div>` : ''}
+              ${dueLabel ? `<div class="task-due ${overdue ? 'overdue' : ''}">${overdue ? '⚠ ' : ''}${dueLabel}</div>` : ''}
+            </div>
+            <div class="task-right">
+              ${t.doneDate ? `<span class="done-stamp">${t.doneDate}</span>` : `<span class="p-badge ${pbadge}">${ptext}</span>`}
+              <span class="expand-chevron">${isExp ? '▲' : '▼'}</span>
+            </div>
+          </div>`;
+
+        if (isExp) {
+          html += `<div class="task-detail">
+            <div>
+              <div class="detail-label">Notes</div>
+              <textarea class="detail-textarea" id="note_${t.id}" placeholder="Add notes, context, next steps, phone numbers, follow-up details...">${t.note || ''}</textarea>
+            </div>
+            <div class="detail-grid">
+              <div>
+                <div class="detail-label">Due date</div>
+                <input class="detail-input" type="date" id="due_${t.id}" value="${t.due || ''}" />
+              </div>
+              <div>
+                <div class="detail-label">Priority</div>
+                <select class="detail-input" id="pri_${t.id}">
+                  <option value="high" ${t.priority === 'high' ? 'selected' : ''}>High</option>
+                  <option value="med" ${t.priority === 'med' ? 'selected' : ''}>Medium</option>
+                  <option value="low" ${t.priority === 'low' ? 'selected' : ''}>Low</option>
+                </select>
+              </div>
+            </div>
+            <div class="detail-actions">
+              <button class="btn btn-primary btn-sm" onclick="saveNote(${t.id})">Save</button>
+              <button class="btn btn-sm" onclick="toggleDone(${t.id}, event)">${t.done ? 'Mark active' : 'Mark done'}</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteTask(${t.id})">Delete</button>
+            </div>
+          </div>`;
+        }
+
+        html += `</div>`;
+      });
+      html += `</div>`;
+    }
+
+    html += `</div>`;
+  });
+
+  document.getElementById('container').innerHTML = html;
+}
+
+load();
+render();
+</script>
+</body>
+</html>
